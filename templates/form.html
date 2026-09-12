@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Holiday Notice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-box {
+            background: #ffffff;
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 550px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 26px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input[type="date"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 5px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #f9f9f9;
+            transition: 0.3s ease-in-out;
+        }
+
+        input[type="date"]:focus,
+        input[type="text"]:focus {
+            border-color: #3498db;
+            background-color: #fff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+        }
+
+        button {
+            margin-top: 30px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #2ecc71, #3498db);
+        }
+
+        @media (max-width: 600px) {
+            .form-box {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>Generate Holiday Notice</h2>
+        <form method="POST">
+            <label for="date">Letter Date:</label>
+            <input type="date" name="date" id="date" required>
+
+            <label for="holiday_start">Holiday Start Date:</label>
+            <input type="date" name="holiday_start" id="holiday_start" required>
+
+            <label for="holiday_end">Holiday End Date:</label>
+            <input type="date" name="holiday_end" id="holiday_end" required>
+
+            <label for="purpose">Purpose of Holiday:</label>
+            <input type="text" name="purpose" id="purpose" placeholder="e.g., Independence Day" required>
+
+            <button type="submit"> Generate Holiday PDF</button>
+        </form>
+    </div>
+</body>
+</html>

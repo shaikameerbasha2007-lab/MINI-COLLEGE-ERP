@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e6f0ff 0%, #f5f9ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2c3e50;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(41, 128, 185, 0.15);
+            width: 95%;
+            max-width: 1000px;
+            text-align: center;
+            border: 1px solid #d6e4f0;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #3498db, transparent);
+        }
+
+        .username {
+            color: #2980b9;
+            font-weight: bold;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: #f8fafd;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e8f0;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            font-size: 24px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #ffffff 0%, #f1f8ff 100%);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #2c3e50;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #d6e4f0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .card i {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+            color: #3498db;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.2);
+            border-color: #3498db;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .card:hover i {
+            color: white;
+        }
+
+        .whatsapp-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafd 100%);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+            border: 2px solid #25D366;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .whatsapp-section::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #25D366, #128C7E, #25D366);
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.3;
+        }
+
+        .whatsapp-card {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+            border: none;
+        }
+
+        .whatsapp-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+        }
+
+        .whatsapp-card i {
+            font-size: 28px;
+            color: white;
+        }
+
+        .logout {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .badge {
+            margin-left: auto;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 4px 8px;
+            font-size: 12px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h2 {
+                font-size: 28px;
+            }
+            
+            .card {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, <span class="username">{{ username }} </span></h2>
+
+        <div class="dashboard-grid">
+            <div class="section">
+                <h3 class="section-title"><i class="fas fa-upload"></i> Upload Center</h3>
+                <div class="card-grid">
+                    <a href="{{ url_for('upload_timetable') }}" class="card">
+                        <i class="fas fa-calendar-plus"></i> Upload Timetable
+                    </a>
+                    <a href="{{ url_for('upload_notice') }}" class="card">
+                        <i class="fas fa-sticky-note"></i> Upload Notices
+                    </a>
+                    <a href="{{ url_for('upload_attendance_unique') }}" class="card">
+                        <i class="fas fa-user-check"></i> Upload Attendance
+                    </a>
+                    <a href="{{ url_for('upload_assignment_unique') }}" class="card">
+                        <i class="fas fa-tasks"></i> Upload Assignment
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title"><i class="fas fa-cogs"></i> Generate & View</h3>
+                <div class="card-grid">
+                    <a href="{{ url_for('timetable') }}" class="card">
+                        <i class="fas fa-calendar-alt"></i> Generate Timetable
+                    </a>
+                    <a href="{{ url_for('generate_select') }}" class="card">
+                        <i class="fas fa-bullhorn"></i> Generate Notices
+                    </a>
+                    <a href="#" class="card" onclick="openAttendance()">
+                        <i class="fas fa-chart-bar"></i> View Attendance
+                    </a>
+                    <a href="#" class="card" onclick="openStudentRecords()">
+                        <i class="fas fa-graduation-cap"></i> Student Records
+                    </a>
+                    <a href="#" class="card" onclick="openAssignment()">
+                        <i class="fas fa-calculator"></i> Assignment
+                    </a>
+                    <a href="/view_complaints" class="card">
+                        <i class="fas fa-clipboard-list"></i> View Complaints
+                        <span id="complaintBadge" class="badge">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="whatsapp-section">
+            <a href="/whatsapp" class="whatsapp-card pulse">
+                <i class="fab fa-whatsapp"></i> DIRECT TO WHATSAPP
+            </a>
+        </div>
+
+        <button class="logout" onclick="window.location.href='/logout'">Logout</button>
+    </div>
+
+    <script>
+    function fetchUnreadComplaintCount() {
+        fetch('/get_unread_complaint_count')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('complaintBadge');
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            });
+    }
+
+    function openAssignment() {
+        const host = window.location.hostname;  
+        window.open("http://" + host + ":5001", "_blank");
+    }
+
+    function openStudentRecords() {
+        const host = window.location.hostname;  
+        window.open("http://" + host + ":5003", "_blank");
+    }
+    
+    function openAttendance() {
+        const host = window.location.hostname;
+        window.open("http://" + host + ":5002", "_blank");
+    }
+
+    window.onload = fetchUnreadComplaintCount;
+    </script>
+</body>
+</html>

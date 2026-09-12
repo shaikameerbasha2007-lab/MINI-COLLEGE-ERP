@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notices</title>
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        a {
+            text-decoration: none;
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="color: royalblue;">Latest Notices</h2>
+    
+    <!-- link to generate form -->
+    <a href="{{ url_for('generate_letter') }}">📝 Generate & Download Notice</a>
+
+    <br><br>
+    <a href="{{ url_for('faculty_dashboard') }}" style="color: red;">Back</a>
+</body>
+</html>

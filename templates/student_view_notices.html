@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Notices</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            height: 100vh;
+        }
+        .notice-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 500px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 12px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            display: flex;
+            align-items: center;
+        }
+        li a {
+            text-decoration: none;
+            color: royalblue;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        li a:hover {
+            text-decoration: underline;
+        }
+        .pdf-icon {
+            font-size: 18px;
+            color: red;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #555;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .deleted-info {
+            color: crimson;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="notice-box">
+        <h2>📢 Uploaded Notices</h2>
+
+        {% if pdf_files %}
+            <ul>
+                {% for notice in pdf_files %}
+                    <li>
+                        <span class="pdf-icon">📄</span>
+                        <a href="{{ url_for('static', filename='notices/' + notice) }}" target="_blank">{{ notice }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No notices uploaded yet.</p>
+            {% if deleted_by %}
+                <p class="deleted-info">🚫 Deleted by: {{ deleted_by }}</p>
+            {% endif %}
+        {% endif %}
+
+        <a class="back-link" href="{{ url_for('student_portal') }}">← Back to Student Portal</a>
+    </div>
+</body>
+</html>

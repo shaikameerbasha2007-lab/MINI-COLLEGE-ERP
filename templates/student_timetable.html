@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Timetable</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+        .year-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+         a.back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        select {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: white;
+            cursor: pointer;
+            width: 200px;
+        }
+        .timetable-display {
+            text-align: center;
+            margin: 20px 0;
+            min-height: 400px;
+        }
+        .timetable-display img {
+            max-width: 90%;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .timetable-display iframe {
+            width: 90%;
+            height: 600px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .error-message {
+            background-color: #ffeaea;
+            color: #c0392b;
+            border: 1px solid #e74c3c;
+        }
+        .info-message {
+            background-color: #e8f4fd;
+            color: #2980b9;
+            border: 1px solid #3498db;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Student Timetable</h2>
+        
+        <div class="year-selector">
+            <label for="yearSelect">Select Academic Year: </label>
+            <select id="yearSelect" onchange="loadTimetable()">
+                <option value="1st_year">1st Year</option>
+                <option value="2nd_year">2nd Year</option>
+                <option value="3rd_year">3rd Year</option>
+            </select>
+        </div>
+        
+        <div id="timetableContent" class="timetable-display">
+            {% if show_image %}
+                {% if file_type == 'pdf' %}
+                    <iframe src="{{ url_for('static', filename='uploads/' ~ filename) }}?t={{ time }}"></iframe>
+                {% else %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ filename) }}?t={{ time }}" alt="Timetable">
+                {% endif %}
+            {% else %}
+                <div class="message error-message">
+                    <p style="color: red; font-weight: bold;">
+                        Timetable is deleted{% if deleted_by %} by {{ deleted_by }}{% endif %}.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div style="text-align: center;">
+       <a class="back-btn" href="{{ url_for('student_portal') }}">⬅ Back</a>
+        </div>
+          
+    </div>
+  
+
+    <script>
+     function loadTimetable() {
+    const yearSelect = document.getElementById('yearSelect');
+    const selectedYear = yearSelect.value;
+    
+    // Redirect to the same page with the selected year as a parameter
+    window.location.href = "{{ url_for('view_student_timetable') }}?year=" + selectedYear;
+}
+        
+        
+        // Set the selected option based on URL parameter
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const year = urlParams.get('year');
+            if (year) {
+                document.getElementById('yearSelect').value = year;
+            }
+        };
+    </script>
+</body>
+</html>

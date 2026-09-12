@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Portal - Amazing Entrance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 36px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            font-weight: 700;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease-out 0.5s;
+        }
+
+        h1.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        h1 img {
+            height: 60px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.5s ease;
+        }
+
+        h1:hover img {
+            transform: rotate(8deg) scale(1.1);
+        }
+
+        .welcome-text {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            font-weight: 400;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out 0.8s;
+        }
+
+        .welcome-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .role-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .role-button {
+            background: linear-gradient(135deg, #5c6bc0 0%, #3949ab 100%);
+            padding: 25px 20px;
+            border-radius: 18px;
+            font-size: 18px;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+        }
+
+        .role-button.student {
+            transition: all 0.6s ease-out 1.2s;
+        }
+
+        .role-button.faculty {
+            transition: all 0.6s ease-out 1.4s;
+        }
+
+        .role-button.admin {
+            transition: all 0.6s ease-out 1.6s;
+        }
+
+        .role-button.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .role-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+        }
+
+        .role-button:hover {
+            background: linear-gradient(135deg, #7986cb 0%, #3f51b5 100%);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .role-button:hover::before {
+            animation: shimmer 1s forwards;
+        }
+
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .role-button i {
+            font-size: 34px;
+            margin-bottom: 12px;
+            transition: transform 0.3s ease;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .role-button:hover i {
+            transform: scale(1.3) rotate(10deg);
+        }
+
+        .role-button span {
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: all 0.8s ease-out 2s;
+        }
+
+        .footer.visible {
+            opacity: 1;
+        }
+
+        /* Confetti animation */
+        .confetti {
+            position: absolute;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .role-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .role-button {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 28px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .role-button {
+                font-size: 16px;
+                padding: 20px 15px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .welcome-text {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+
+    <div class="container" id="main-container">
+        <h1 id="main-heading">
+            <img src="https://uploads.onecompiler.io/438uqf3mh/43x65qxna/mbts%20logo.jpg" alt="College Logo">
+            Welcome to College Portal
+        </h1>
+        
+        <p class="welcome-text" id="welcome-text">Select your role to access the portal</p>
+        
+        <div class="role-selection">
+            <a href="/student" class="role-button student" id="student-btn">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Student</span>
+            </a>
+            <a href="/login" class="role-button faculty" id="faculty-btn">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Faculty</span>
+            </a>
+            <a href="/admin" class="role-button admin" id="admin-btn">
+                <i class="fas fa-user-shield"></i>
+                <span>Admin</span>
+            </a>
+        </div>
+        
+        <div class="footer" id="footer">
+            <p>© 2025 College Portal. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Confetti container -->
+    <div id="confetti-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#ffffff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } }
+                }
+            });
+
+            // Animate elements in sequence
+            setTimeout(() => {
+                document.getElementById('main-container').classList.add('visible');
+            }, 200);
+
+            setTimeout(() => {
+                document.getElementById('main-heading').classList.add('visible');
+            }, 800);
+
+            setTimeout(() => {
+                document.getElementById('welcome-text').classList.add('visible');
+            }, 1200);
+
+            setTimeout(() => {
+                document.getElementById('student-btn').classList.add('visible');
+            }, 1500);
+
+            setTimeout(() => {
+                document.getElementById('faculty-btn').classList.add('visible');
+            }, 1700);
+
+            setTimeout(() => {
+                document.getElementById('admin-btn').classList.add('visible');
+            }, 1900);
+
+            setTimeout(() => {
+                document.getElementById('footer').classList.add('visible');
+            }, 2200);
+
+            // Create initial confetti explosion
+            createConfetti(30);
+        });
+
+        // Confetti creation function
+        function createConfetti(amount) {
+            const confettiContainer = document.getElementById('confetti-container');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9c74f', '#ffafcc', '#83e377'];
+            
+            for (let i = 0; i < amount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = Math.floor(Math.random() * 12) + 6;
+                const posX = Math.random() * window.innerWidth;
+                const duration = Math.random() * 3 + 3;
+                
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.backgroundColor = color;
+                confetti.style.left = `${posX}px`;
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.animation = `fall ${duration}s linear forwards`;
+                
+                confettiContainer.appendChild(confetti);
+                
+                // Remove confetti after animation completes
+                setTimeout(() => {
+                    confetti.remove();
+                }, duration * 1000);
+            }
+        }
+
+        // Add interactive effects to buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.role-button');
+            
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    createConfetti(10);
+                    
+                    // Add a subtle bounce effect
+                    this.style.transform = 'translateY(-8px) scale(1.05)';
+                    
+                    // Play a subtle sound (optional)
+                    // const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
+                    // audio.volume = 0.3;
+                    // audio.play();
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Create a ripple effect
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    this.appendChild(ripple);
+                    
+                    // Get click coordinates
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Position the ripple
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    
+                    // Remove ripple after animation
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                    
+                    // Create more confetti on click
+                    createConfetti(20);
+                    
+                    // Navigate after a short delay for animation
+                    setTimeout(() => {
+                        window.location.href = this.getAttribute('href');
+                    }, 500);
+                });
+            });
+            
+            // Add parallax effect to container on mouse move
+            document.addEventListener('mousemove', function(e) {
+                const container = document.getElementById('main-container');
+                const x = (e.clientX / window.innerWidth - 0.5) * 10;
+                const y = (e.clientY / window.innerHeight - 0.5) * 10;
+                
+                container.style.transform = `rotate3d(${y/10}, ${x/10}, 0, ${Math.abs(x+y)/10}deg)`;
+            });
+        });
+
+        // Add ripple effect styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.4);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                width: 100px;
+                height: 100px;
+                margin-top: -50px;
+                margin-left: -50px;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple {
+                to {
+                    transform: scale(2.5);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

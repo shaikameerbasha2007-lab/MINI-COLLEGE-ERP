@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Notice</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 40px; }
+        .center { text-align: center; font-weight: bold; font-size: 20px; margin-bottom: 30px; }
+        .right { text-align: right; }
+        .underline { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="right">From the Office of the Principle,<br>
+        M.B.T.S.Govt Polytechnic,<br>
+        Guntur<br>
+    </div>
+    <br><br>
+
+    <div class="right">Date: {{ date }}</div>
+    <div class="left">CIRCULAR/HOLIDAY/2025</div>
+
+    <div class="center underline">NOTICE</div>
+
+    <p>
+        TO all students of M.B.T.S Government Polytechnic are hereby informed that due to {{ purpose }},
+        holidays are declared from <strong>{{ holiday_start }}</strong> to <strong>{{ holiday_end }}</strong>.
+        The college will reopen on <strong>{{ reopen_date }}</strong>.
+    </p>
+
+    <br><br>
+    <div style="text-align: center;"><strong>Thank you</strong></div>
+    <br><br>
+    <div class="right">PRINCIPAL</div>
+</body>
+</html>

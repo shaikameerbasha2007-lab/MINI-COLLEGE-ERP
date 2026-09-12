@@ -1,0 +1,24 @@
+{
+  "students": [
+    {
+      "pin": "23014-CM-004",
+      "name": "thanooj",
+      "class": "v sem",
+      "academicYear": "3rd Year",
+      "email": ""
+    }
+  ],
+  "attendanceData": [
+    {
+      "pin": "23014-CM-004",
+      "month": "June",
+      "year": 2023,
+      "spell1": 4,
+      "spell2": 13,
+      "spell3": 0,
+      "totalDays": 18
+    }
+  ],
+  "lastPIN": "23014-CM-004",
+  "lastSemester": "v sem"
+}

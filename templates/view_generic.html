@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* -------- CSS Variables -------- */
+        :root {
+            --primary: #2196F3;
+            --primary-dark: #0d8bf2;
+            --primary-light: rgba(33, 150, 243, 0.1);
+            --secondary: #4CAF50;
+            --danger: #f44336;
+            --danger-dark: #d32f2f;
+            --light: #f9f9f9;
+            --dark: #333;
+            --gray: #777;
+            --white: #ffffff;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* -------- Global Styles -------- */
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            animation: fadeInDown 1s ease-in-out;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            animation: expandLine 1s ease-out;
+        }
+
+        /* -------- Enhanced Back Button Styles -------- */
+        .back-button-container {
+            text-align: center;
+            margin: 30px 0 40px 0;
+            position: relative;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(33, 150, 243, 0.4);
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+        }
+
+        .back-button:hover:before {
+            left: 100%;
+        }
+
+        .back-button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .back-button i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .back-button:hover i {
+            transform: translateX(-4px);
+        }
+
+        /* Back button pulse animation */
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+            }
+        }
+
+        .back-button.pulse {
+            animation: pulse-glow 2s infinite;
+        }
+
+        /* -------- Year Navigation -------- */
+        .year-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .year-btn {
+            padding: 12px 25px;
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: var(--border-radius);
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .year-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .year-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* -------- File List Container -------- */
+        .file-list {
+            max-width: 100%;
+            margin: 20px auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: fadeInUp 1s ease-in-out;
+            transition: var(--transition);
+        }
+
+        .file-list:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .file-list h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--dark);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .file-list h3 i {
+            color: var(--primary);
+        }
+
+        /* -------- File Item Style -------- */
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            transition: var(--transition);
+            animation: slideInRight 0.5s ease-out;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .file-item:hover {
+            background: var(--light);
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .file-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: var(--transition);
+            flex: 1;
+        }
+
+        .file-link i {
+            font-size: 1.2rem;
+        }
+
+        .file-link:hover {
+            color: var(--primary-dark);
+            transform: translateX(5px);
+        }
+
+        /* -------- Delete Button -------- */
+        .delete-btn {
+            background: var(--danger);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .delete-btn:hover {
+            background: var(--danger-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+        }
+
+        /* -------- Empty State -------- */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* -------- Animations -------- */
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes fadeInUp {
+            from {transform: translateY(20px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+
+        @keyframes fadeInDown {
+            from {transform: translateY(-20px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+
+        @keyframes slideIn {
+            from {transform: translateY(-10px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+
+        @keyframes slideInRight {
+            from {transform: translateX(20px); opacity: 0;}
+            to {transform: translateX(0); opacity: 1;}
+        }
+
+        @keyframes expandLine {
+            from {width: 0;}
+            to {width: 100px;}
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+        }
+
+        /* -------- Responsive -------- */
+        @media(max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .back-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .year-navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .year-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .file-list {
+                padding: 20px;
+            }
+            
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .file-link {
+                width: 100%;
+            }
+            
+            .delete-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* -------- Loading Spinner -------- */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        a.back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Hidden class for year content */
+        .hidden {
+            display: none;
+        }
+        .year-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Enhanced Back Button -->
+        <div class="back-button-container">
+            <a class="back-btn" href="{{ url_for('student_portal') }}">⬅ Back</a>
+        </div>
+
+        <h2><i class="fas fa-file-alt"></i> {{ title }}</h2>
+
+        <!-- Year Navigation -->
+        <div class="year-navigation">
+            <button class="year-btn {% if not year or year == '1' %}active{% endif %}" data-year="1">
+                <i class="fas fa-calendar-alt"></i> 1st Year
+            </button>
+            <button class="year-btn {% if year == '2' %}active{% endif %}" data-year="2">
+                <i class="fas fa-calendar-alt"></i> 2nd Year
+            </button>
+            <button class="year-btn {% if year == '3' %}active{% endif %}" data-year="3">
+                <i class="fas fa-calendar-alt"></i> 3rd Year
+            </button>
+        </div>
+
+        <!-- File Lists for Each Year -->
+        {% for year_num in ['1', '2', '3'] %}
+            <div class="file-list year-content {% if (not year and year_num == '1') or year == year_num %}active{% else %}hidden{% endif %}" id="year-{{ year_num }}">
+                <h3><i class="fas fa-file-alt"></i> {{ title }} - Year {{ year_num }}</h3>
+                
+                {% set year_files = pdf_files.get(year_num, []) %}
+                {% if year_files %}
+                    {% for file in year_files %}
+                        <div class="file-item">
+                            <a href="{{ url_for('static', filename='uploads/' + file_type + '/year_' + year_num + '/' + file) }}" target="_blank" class="file-link">
+                                <i class="fas fa-file-pdf"></i> {{ file }}
+                            </a>
+                            {% if session.get('user') %}
+                               
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No files uploaded yet for Year {{ year_num }}</h3>
+                        <p>{% if session.get('user') %}Upload files using the faculty dashboard{% else %}Files will appear here once uploaded{% endif %}</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Year navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearButtons = document.querySelectorAll('.year-btn');
+            const yearContents = document.querySelectorAll('.year-content');
+            
+            yearButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const year = this.getAttribute('data-year');
+                    
+                    // Update active button
+                    yearButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected year content
+                    yearContents.forEach(content => {
+                        if (content.id === `year-${year}`) {
+                            content.classList.remove('hidden');
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                            content.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Update URL without reloading page
+                    const url = new URL(window.location);
+                    url.searchParams.set('year', year);
+                    window.history.replaceState({}, '', url);
+                });
+            });
+            
+            // Add animation to file items on page load
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

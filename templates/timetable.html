@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MBTS Govt Polytechnic - Timetable Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #cce6ff 0%, #91c5ff 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+      color: #003366;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 2rem 2rem;
+      background: #f0faff;
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(20, 94, 156, 0.15);
+      border: 2px solid #a4d2ff;
+    }
+
+    /* Header with logo and title */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .logo {
+      width: 80px;
+      height: auto;
+      margin-right: 20px;
+    }
+    .title-text h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #035a9e;
+      margin: 0;
+      text-align: center;
+    }
+    .title-text h2 {
+      font-size: 1.5rem;
+      color: #3399ff;
+      margin: 0;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+    input, select {
+      padding: 0.5rem;
+      border: 1.5px solid #91c5ff;
+      border-radius: 10px;
+      font-size: 1rem;
+      background: #d6e9ff;
+      color: #003366;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3399ff;
+      box-shadow: 0 0 6px #3399ff88;
+      background: #c9e3ff;
+    }
+    button {
+      padding: 0.65rem 1.6rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 14px;
+      margin-top: 1rem;
+      margin-right: 0.7rem;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.4px;
+    }
+    button#generate-btn { background: #3399cc; }
+    button#download-btn { background: #66a3ff; }
+    button#reset-btn { background: #ff6b6b; }
+    button#generate-btn:hover { background: #287fa3; }
+    button#download-btn:hover { background: #4a8ce0; }
+    button#reset-btn:hover { background: #e04a4a; }
+
+    #timetable-scroll {
+      overflow-x: auto;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+    table.timetable {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #eaf5ff;
+      border-radius: 18px;
+      border: 2px solid #99caff;
+    }
+    table.timetable thead th {
+      color: #045a8d;
+      font-weight: 700;
+      font-size: 1rem;
+      background: #bddbff;
+      border: 1.5px solid #91c5ff;
+      padding: 1rem 0.6rem;
+      white-space: nowrap;
+    }
+    table.timetable tbody td {
+      border: 1.5px solid #a7cfff;
+      padding: 0.55rem 0.6rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: #204060;
+      white-space: normal;
+      user-select: none;
+      height: 60px;
+    }
+    table.timetable tbody td.empty-slot:hover {
+      background: #cce3ff;
+    }
+    table.timetable tbody td.subject {
+      background: #66a3ff88;
+      border-radius: 8px;
+    }
+    table.timetable tbody td.subject small {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #0f3460cc;
+    }
+    .day-header {
+      font-weight: 700;
+      background: #4a90e2cc;
+      color: #fff;
+      border-right: 2px solid #72b0ffcc;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .instructions {
+      background: #e6f2ff;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      border-left: 4px solid #3399ff;
+    }
+    .instructions h3 {
+      margin-top: 0;
+      color: #035a9e;
+    }
+    .instructions ol {
+      padding-left: 1.5rem;
+    }
+    .instructions li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="main-container">
+
+    <!-- Header with Logo -->
+    <div class="header">
+      <img src="https://uploads.onecompiler.io/438uqf3mh/43x65qxna/mbts%20logo.jpg" alt="College Logo" class="logo" />
+      <div class="title-text">
+        <h1>MBTS GOVERNMENT POLYTECHNIC COLLEGE</h1>
+        <h2>TIME TABLE GENERATOR</h2>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="control-group"><label>Days</label><select id="days"><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option></select></div>
+      <div class="control-group"><label>Periods</label><select id="periods"><option value="6" selected>6</option><option value="7">7</option><option value="8">8</option></select></div>
+      <div class="control-group"><label>Start Time</label><input type="time" id="start-time" value="09:30" /></div>
+      <div class="control-group"><label>Period Duration (minutes)</label><input type="number" id="duration" value="50" min="10" max="180" /></div>
+      <div class="control-group"><label>Subject</label><input type="text" id="subject" placeholder="Subject Name" /></div>
+      <div class="control-group"><label>Teacher</label><input type="text" id="teacher" placeholder="Teacher Name" /></div>
+      <div class="control-group"><label>Room No.</label><input type="text" id="room" placeholder="Room Number" /></div>
+      <div class="control-group"><label>Subject Color</label><input type="color" id="color" value="#66a3ff" /></div>
+    </div>
+
+    <!-- Buttons -->
+    <div>
+      <button id="generate-btn">Generate Timetable</button>
+      <button id="download-btn">Download as PDF</button>
+      <button id="reset-btn">Reset All</button>
+    </div>
+
+    <!-- Timetable -->
+    <div id="timetable-scroll">
+      <div id="timetable-container"></div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <h3>How to Use:</h3>
+      <ol>
+        <li>Configure the timetable settings (days, periods, start time, etc.)</li>
+        <li>Click "Generate Timetable" to create the empty timetable</li>
+        <li>Fill in the subject details (subject, teacher, room, color)</li>
+        <li>Click on any time slot to add the subject</li>
+        <li>Click "Download as PDF" to save your timetable</li>
+      </ol>
+    </div>
+  </div>
+
+  <script>
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    function formatTime(hour, minute) {
+      const hFormatted = hour % 12 || 12;
+      const mFormatted = minute.toString().padStart(2, '0');
+      const suffix = hour < 12 ? 'AM' : 'PM';
+      return `${hFormatted}:${mFormatted} ${suffix}`;
+    }
+
+    document.getElementById('generate-btn').onclick = () => {
+      const dayCount = Number(document.getElementById('days').value);
+      const periodCount = Number(document.getElementById('periods').value);
+      const startTime = document.getElementById('start-time').value;
+      const duration = Number(document.getElementById('duration').value);
+      const container = document.getElementById('timetable-container');
+      
+      if (!startTime || !duration || !dayCount || !periodCount) {
+        alert("Please fill all fields properly.");
+        return;
+      }
+      
+      const [startHour, startMinute] = startTime.split(':').map(Number);
+
+      // Convert start time to minutes
+      let currentTime = startHour * 60 + startMinute;
+      const timeSlots = [];
+      let lunchInserted = false;
+      const lunchStart = 12 * 60 + 50; // 12:50 in minutes
+      const lunchEnd = 13 * 60 + 40;   // 13:40 in minutes
+
+      // Generate time slots with lunch break
+      for (let i = 0; i < periodCount; i++) {
+        // Check if we need to insert lunch before this period
+        if (!lunchInserted && currentTime + duration > lunchStart) {
+          // Insert lunch break
+          timeSlots.push({
+            label: "Lunch 12:50 - 1:40",
+            isLunch: true,
+            start: lunchStart,
+            end: lunchEnd
+          });
+          lunchInserted = true;
+          currentTime = lunchEnd; // Continue from after lunch
+        }
+
+        const periodStart = currentTime;
+        const periodEnd = currentTime + duration;
+        
+        timeSlots.push({
+          label: `${formatTime(Math.floor(periodStart / 60), periodStart % 60)} - ${formatTime(Math.floor(periodEnd / 60), periodEnd % 60)}`,
+          isLunch: false,
+          start: periodStart,
+          end: periodEnd
+        });
+        
+        currentTime = periodEnd;
+      }
+
+      // If lunch hasn't been inserted by the end, add it at the end
+      if (!lunchInserted) {
+        timeSlots.push({
+          label: "Lunch 12:50 - 1:40",
+          isLunch: true,
+          start: lunchStart,
+          end: lunchEnd
+        });
+      }
+
+      const table = document.createElement('table');
+      table.className = 'timetable';
+      const thead = table.createTHead();
+      const headerRow = thead.insertRow();
+      headerRow.insertCell().textContent = 'Day / Periods';
+      timeSlots.forEach(slot => {
+        const th = document.createElement('th');
+        th.textContent = slot.label;
+        headerRow.appendChild(th);
+      });
+
+      const tbody = table.createTBody();
+      for (let d = 0; d < dayCount; d++) {
+        const row = tbody.insertRow();
+        const dayCell = row.insertCell();
+        dayCell.textContent = days[d];
+        dayCell.className = 'day-header';
+
+        timeSlots.forEach(slot => {
+          if (slot.isLunch) {
+            const lunchCell = row.insertCell();
+            lunchCell.textContent = "Lunch";
+            lunchCell.style.background = 'linear-gradient(90deg, #4db6ac, #00796b)';
+            lunchCell.style.color = '#fff';
+            lunchCell.style.fontWeight = 'bold';
+            lunchCell.style.borderRadius = '8px';
+            lunchCell.style.cursor = 'not-allowed';
+          } else {
+            const cell = row.insertCell();
+            cell.className = 'empty-slot';
+            cell.onclick = () => fillCell(cell);
+          }
+        });
+      }
+
+      container.innerHTML = '';
+      container.appendChild(table);
+    };
+
+    function fillCell(cell) {
+      const subject = document.getElementById('subject').value.trim();
+      const teacher = document.getElementById('teacher').value.trim();
+      const room = document.getElementById('room').value.trim();
+      const color = document.getElementById('color').value;
+      
+      if (!subject || !teacher || !room || cell.textContent === 'Lunch') {
+        if (cell.textContent !== 'Lunch') {
+          alert("Please fill in Subject, Teacher, and Room fields first.");
+        }
+        return;
+      }
+      
+      cell.className = 'subject';
+      cell.style.backgroundColor = color + 'cc';
+      cell.innerHTML = `${subject}<br><small>${teacher} | ${room}</small>`;
+    }
+
+    document.getElementById('reset-btn').onclick = () => {
+      if (confirm("Are you sure you want to reset the timetable? All your entries will be lost.")) {
+        document.getElementById('timetable-container').innerHTML = '';
+        document.getElementById('subject').value = '';
+        document.getElementById('teacher').value = '';
+        document.getElementById('room').value = '';
+      }
+    };
+
+    document.getElementById('download-btn').onclick = () => {
+      const timetable = document.getElementById('timetable-container');
+      if (!timetable || timetable.innerHTML === '') {
+        alert("Please generate a timetable first.");
+        return;
+      }
+
+      // Create a clone of the timetable for PDF generation
+      const printableContent = document.createElement('div');
+      printableContent.style.padding = '20px';
+      printableContent.style.backgroundColor = 'white';
+      printableContent.style.color = 'black';
+      printableContent.style.width = '100%';
+      
+      // Add college header
+      const header = document.createElement('div');
+      header.style.textAlign = 'center';
+      header.style.marginBottom = '20px';
+      header.innerHTML = `
+        <h1 style="margin: 0; color: #035a9e; font-size: 24px;">MBTS GOVERNMENT POLYTECHNIC COLLEGE</h1>
+        <h2 style="margin: 5px 0 0 0; color: #3399ff; font-size: 20px;">TIME TABLE</h2>
+      `;
+      printableContent.appendChild(header);
+      
+      // Clone the timetable and adjust styles for printing
+      const clonedTimetable = timetable.cloneNode(true);
+      clonedTimetable.style.width = '100%';
+      clonedTimetable.style.fontSize = '12px';
+      
+      // Adjust cell sizes for PDF
+      const cells = clonedTimetable.querySelectorAll('td, th');
+      cells.forEach(cell => {
+        cell.style.padding = '6px 4px';
+        cell.style.fontSize = '11px';
+      });
+      
+      printableContent.appendChild(clonedTimetable);
+      
+      // Add footer with generation date
+      const footer = document.createElement('div');
+      footer.style.textAlign = 'center';
+      footer.style.marginTop = '20px';
+      footer.style.fontSize = '12px';
+      footer.style.color = '#666';
+      footer.textContent = `Generated on: ${new Date().toLocaleDateString()}`;
+      printableContent.appendChild(footer);
+
+      // Generate PDF
+      const options = {
+        margin: 10,
+        filename: 'MBTS_Timetable.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' }
+      };
+
+      html2pdf().set(options).from(printableContent).save();
+    };
+  </script>
+</body>
+</html>

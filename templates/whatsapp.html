@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Connect</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #fdf6f0 0%, #f8edeb 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .container {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #25D366, #128C7E, #075E54);
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .logo {
+    color: #25D366;
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+  
+  h1 {
+    color: #075E54;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  .subtitle {
+    color: #667781;
+    font-size: 15px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+  
+  .input-group {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8696A0;
+    font-size: 18px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border-radius: 12px;
+    border: 1px solid #e6e6e6;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #25D366;
+    box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+    background-color: #fff;
+  }
+  
+  input::placeholder {
+    color: #a6a6a6;
+  }
+  
+  button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  .info {
+    font-size: 13px;
+    color: #8696A0;
+    margin-top: 25px;
+    line-height: 1.6;
+    padding: 0 10px;
+  }
+  
+  .example {
+    display: block;
+    background-color: #f0f4f8;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #4a5c66;
+  }
+  
+  .decoration {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+  }
+  
+  .circle:nth-child(2) {
+    background-color: #c0c0c0;
+  }
+  
+  .circle:nth-child(3) {
+    background-color: #a0a0a0;
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      padding: 30px 20px;
+    }
+    
+    h1 {
+      font-size: 24px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">
+    <i class="fab fa-whatsapp"></i>
+  </div>
+  
+  <h1>WhatsApp Connect</h1>
+  
+  <p class="subtitle">Enter student phone number to start a conversation on WhatsApp</p>
+  
+  <form method="POST">
+    <div class="input-group">
+      <i class="fas fa-phone"></i>
+      <input type="text" name="phone_number" placeholder="e.g., 919876543210" required>
+    </div>
+    
+    <button type="submit">
+      <i class="fab fa-whatsapp"></i> Open WhatsApp
+    </button>
+  </form>
+  
+  
+  <div class="decoration">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+</div>
+
+</body>
+</html>

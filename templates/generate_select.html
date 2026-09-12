@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Notice Type</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #2c3e50;
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+
+        a {
+            display: block;
+            margin: 15px 0;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        a:hover {
+            background: linear-gradient(to right, #00f2fe, #4facfe);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>📋 Select Holiday Notice Type</h3>
+        <a href="{{ url_for('generate_letter') }}">🗓️ Single Holiday Notice</a>
+        <a href="{{ url_for('generate_multiple_letter') }}">📆 Multiple Holidays Notice</a>
+    </div>
+</body>
+</html>

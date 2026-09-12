@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --primary-light: rgba(52, 152, 219, 0.1);
+            --secondary: #1abc9c;
+            --secondary-dark: #16a085;
+            --danger: #e74c3c;
+            --danger-dark: #c0392b;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+        .subtitle {
+            color: var(--dark);
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            height: calc(100vh - 180px);
+        }
+
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            animation: slideInLeft 0.8s ease-out;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .upload-section:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .preview-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            animation: slideInRight 0.8s ease-out;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-section:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: var(--dark);
+            font-size: 24px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            bottom: 0;
+            left: 0;
+            border-radius: 2px;
+            animation: expandLine 1s ease-out;
+        }
+
+        .year-selection {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .year-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background-color: var(--white);
+            color: var(--primary);
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .year-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .year-btn:hover:before {
+            left: 100%;
+        }
+
+        .year-btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .year-btn.active {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            transform: scale(1.05);
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--gray);
+            padding: 40px 20px;
+            border-radius: 15px;
+            background-color: var(--light);
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            transform: scale(1.02);
+            animation: pulse 1.5s infinite;
+        }
+
+        .file-upload-area i {
+            font-size: 50px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .file-upload-area:hover i {
+            transform: scale(1.1);
+            color: var(--secondary);
+        }
+
+        .file-upload-text {
+            color: var(--gray);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .selected-file {
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--primary);
+            animation: slideIn 0.3s ease-out;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--primary-light);
+            border-radius: 8px;
+        }
+
+        .selected-file i {
+            color: var(--success);
+            font-size: 20px;
+        }
+
+        .upload-btn {
+            margin-top: 20px;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--white);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-btn:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .upload-btn:active {
+            transform: translateY(1px);
+        }
+
+        .upload-btn:active:after {
+            animation: ripple 1s ease-out;
+        }
+
+        .upload-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .timetable-display {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            animation: fadeInUp 0.8s ease-out;
+            text-align: center;
+            transition: var(--transition);
+            display: none;
+        }
+
+        .timetable-display.active {
+            display: block;
+            animation: zoomIn 0.5s ease-out;
+        }
+
+        .timetable-display h3 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .timetable-display h3 i {
+            color: var(--primary);
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin: 15px 0;
+            animation: zoomIn 0.5s ease-out;
+            transition: var(--transition);
+        }
+
+        .preview-img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .pdf-preview {
+            padding: 30px;
+            background: var(--light);
+            border-radius: 10px;
+            margin: 20px 0;
+            animation: fadeIn 0.8s ease-out;
+            transition: var(--transition);
+        }
+
+        .pdf-preview:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .pdf-icon {
+            font-size: 80px;
+            color: var(--danger);
+            margin: 15px 0;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .pdf-preview:hover .pdf-icon {
+            transform: scale(1.1);
+        }
+
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .pdf-link:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .remove-button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(to right, var(--danger), var(--warning));
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .remove-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+            background: linear-gradient(to right, var(--danger-dark), #e67e22);
+        }
+
+        .no-timetable {
+            color: var(--gray);
+            font-style: italic;
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(127, 140, 141, 0.1);
+            border-radius: 10px;
+            font-size: 18px;
+            animation: fadeIn 1s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .no-timetable i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 20px;
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--transition);
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: var(--light);
+            align-self: flex-start;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: var(--secondary);
+            transform: translateX(-5px);
+            background: var(--primary-light);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes expandLine {
+            from { width: 0%; }
+            to { width: 60%; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .year-selection {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .dashboard {
+                gap: 20px;
+            }
+            
+            .upload-section, .preview-section {
+                padding: 20px;
+            }
+            
+            .file-upload-area {
+                padding: 30px 15px;
+            }
+        }
+
+        /* Flash messages styling */
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .flash-message {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideInRight 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flash-success {
+            background: var(--success);
+        }
+
+        .flash-error {
+            background: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages Container -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calendar-alt"></i> Timetable Management System</h1>
+            <p class="subtitle">Upload and manage academic timetables for different years </p>
+        </header>
+        
+        <div class="dashboard">
+            <section class="upload-section">
+                <h2><i class="fas fa-cloud-upload-alt"></i> Upload Timetable</h2>
+                
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <div class="year-selection">
+                        <button type="button" class="year-btn active" data-year="1st_year">
+                            <i class="fas fa-calendar-day"></i> 1st Year
+                        </button>
+                        <button type="button" class="year-btn" data-year="2nd_year">
+                            <i class="fas fa-calendar-week"></i> 2nd Year
+                        </button>
+                        <button type="button" class="year-btn" data-year="3rd_year">
+                            <i class="fas fa-calendar"></i> 3rd Year
+                        </button>
+                    </div>
+                    
+                    <input type="hidden" name="year" id="selectedYear" value="1st_year" required>
+                    
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="file-upload-text">Click to select or drag and drop your timetable file</div>
+                        <div class="file-upload-text">(PDF or Image files accepted)</div>
+                        <input type="file" name="timetable" id="fileInput" class="file-input" accept=".pdf,image/*" required>
+                        <div class="selected-file" id="selectedFileName" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <span id="fileNameText">No file selected</span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="upload-btn" id="uploadButton">
+                        <i class="fas fa-upload"></i> Upload Timetable
+                    </button>
+                </form>
+                
+                <a href="{{ url_for('faculty_dashboard') }}" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </section>
+            
+            <section class="preview-section">
+                <h2><i class="fas fa-eye"></i> Timetable Preview</h2>
+                
+                <!-- 1st Year Timetable (shown by default) -->
+                <div class="timetable-display active" id="1st_year-display">
+                    <h3><i class="fas fa-calendar-day"></i> 1st Year Timetable</h3>
+                    
+                    {% if timetable_files['1st_year']['exists'] %}
+                        {% if timetable_files['1st_year']['file_type'] == 'pdf' %}
+                            <div class="pdf-preview">
+                                <i class="fas fa-file-pdf pdf-icon"></i>
+                                <p>PDF Timetable Uploaded</p>
+                                <a href="{{ url_for('static', filename='uploads/' ~ timetable_files['1st_year']['filename']) }}" target="_blank" class="pdf-link">
+                                    <i class="fas fa-external-link-alt"></i> View PDF Timetable
+                                </a>
+                            </div>
+                        {% else %}
+                            <p>Image Timetable Uploaded</p>
+                            <img src="{{ url_for('static', filename='uploads/' ~ timetable_files['1st_year']['filename']) }}" alt="1st Year Timetable" class="preview-img">
+                        {% endif %}
+                        
+                        <form action="{{ url_for('remove_timetable') }}" method="POST">
+                            <input type="hidden" name="year" value="1st_year">
+                            <button type="submit" class="remove-button" onclick="return confirm('Are you sure you want to delete the 1st Year timetable?');">
+                                <i class="fas fa-trash-alt"></i> Remove 1st Year Timetable
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="no-timetable">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No timetable uploaded for 1st Year</p>
+                            <p>Upload a timetable using the form on the left</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- 2nd Year Timetable (hidden by default) -->
+                <div class="timetable-display" id="2nd_year-display">
+                    <h3><i class="fas fa-calendar-week"></i> 2nd Year Timetable</h3>
+                    
+                    {% if timetable_files['2nd_year']['exists'] %}
+                        {% if timetable_files['2nd_year']['file_type'] == 'pdf' %}
+                            <div class="pdf-preview">
+                                <i class="fas fa-file-pdf pdf-icon"></i>
+                                <p>PDF Timetable Uploaded</p>
+                                <a href="{{ url_for('static', filename='uploads/' ~ timetable_files['2nd_year']['filename']) }}" target="_blank" class="pdf-link">
+                                    <i class="fas fa-external-link-alt"></i> View PDF Timetable
+                                </a>
+                            </div>
+                        {% else %}
+                            <p>Image Timetable Uploaded</p>
+                            <img src="{{ url_for('static', filename='uploads/' ~ timetable_files['2nd_year']['filename']) }}" alt="2nd Year Timetable" class="preview-img">
+                        {% endif %}
+                        
+                        <form action="{{ url_for('remove_timetable') }}" method="POST">
+                            <input type="hidden" name="year" value="2nd_year">
+                            <button type="submit" class="remove-button" onclick="return confirm('Are you sure you want to delete the 2nd Year timetable?');">
+                                <i class="fas fa-trash-alt"></i> Remove 2nd Year Timetable
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="no-timetable">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No timetable uploaded for 2nd Year</p>
+                            <p>Upload a timetable using the form on the left</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- 3rd Year Timetable (hidden by default) -->
+                <div class="timetable-display" id="3rd_year-display">
+                    <h3><i class="fas fa-calendar"></i> 3rd Year Timetable</h3>
+                    
+                    {% if timetable_files['3rd_year']['exists'] %}
+                        {% if timetable_files['3rd_year']['file_type'] == 'pdf' %}
+                            <div class="pdf-preview">
+                                <i class="fas fa-file-pdf pdf-icon"></i>
+                                <p>PDF Timetable Uploaded</p>
+                                <a href="{{ url_for('static', filename='uploads/' ~ timetable_files['3rd_year']['filename']) }}" target="_blank" class="pdf-link">
+                                    <i class="fas fa-external-link-alt"></i> View PDF Timetable
+                                </a>
+                            </div>
+                        {% else %}
+                            <p>Image Timetable Uploaded</p>
+                            <img src="{{ url_for('static', filename='uploads/' ~ timetable_files['3rd_year']['filename']) }}" alt="3rd Year Timetable" class="preview-img">
+                        {% endif %}
+                        
+                        <form action="{{ url_for('remove_timetable') }}" method="POST">
+                            <input type="hidden" name="year" value="3rd_year">
+                            <button type="submit" class="remove-button" onclick="return confirm('Are you sure you want to delete the 3rd Year timetable?');">
+                                <i class="fas fa-trash-alt"></i> Remove 3rd Year Timetable
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="no-timetable">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No timetable uploaded for 3rd Year</p>
+                            <p>Upload a timetable using the form on the left</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Year selection functionality
+        document.querySelectorAll('.year-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.year-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update hidden input value
+                const selectedYear = this.getAttribute('data-year');
+                document.getElementById('selectedYear').value = selectedYear;
+                
+                // Hide all timetable displays
+                document.querySelectorAll('.timetable-display').forEach(display => {
+                    display.classList.remove('active');
+                });
+                
+                // Show selected year's timetable with animation
+                setTimeout(() => {
+                    document.getElementById(selectedYear + '-display').classList.add('active');
+                }, 200);
+            });
+        });
+        
+        // File input functionality
+        const fileInput = document.getElementById('fileInput');
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const selectedFileName = document.getElementById('selectedFileName');
+        const fileNameText = document.getElementById('fileNameText');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadButton = document.getElementById('uploadButton');
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileNameText.textContent = this.files[0].name;
+                selectedFileName.style.display = 'flex';
+                fileUploadArea.style.borderColor = 'var(--success)';
+                
+                // Add success animation
+                fileUploadArea.style.animation = 'pulse 1s';
+                setTimeout(() => {
+                    fileUploadArea.style.animation = '';
+                }, 1000);
+            } else {
+                selectedFileName.style.display = 'none';
+                fileUploadArea.style.borderColor = '';
+            }
+        });
+        
+        // Drag and drop functionality
+        fileUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        fileUploadArea.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+        
+        fileUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                fileNameText.textContent = e.dataTransfer.files[0].name;
+                selectedFileName.style.display = 'flex';
+                
+                // Add success animation
+                fileUploadArea.style.borderColor = 'var(--success)';
+                fileUploadArea.style.animation = 'pulse 1s';
+                setTimeout(() => {
+                    fileUploadArea.style.animation = '';
+                }, 1000);
+            }
+        });
+        
+        // Click on upload area to trigger file input
+        fileUploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        // Initially hide the selected file name
+        selectedFileName.style.display = 'none';
+        
+        // Prevent double submission
+        let isSubmitting = false;
+        
+        uploadForm.addEventListener('submit', function(e) {
+            if (isSubmitting) {
+                e.preventDefault();
+                return;
+            }
+            
+            // Validate file is selected
+            if (fileInput.files.length === 0) {
+                e.preventDefault();
+                // Create a flash message
+                createFlashMessage('Please select a file to upload.', 'error');
+                return;
+            }
+            
+            // Disable the button and set submitting flag
+            isSubmitting = true;
+            uploadButton.disabled = true;
+            uploadButton.innerHTML = '<div class="spinner"></div> Uploading...';
+            
+            // Re-enable after 5 seconds in case of error (safety measure)
+            setTimeout(() => {
+                isSubmitting = false;
+                uploadButton.disabled = false;
+                uploadButton.innerHTML = '<i class="fas fa-upload"></i> Upload Timetable';
+            }, 5000);
+        });
+        
+        // Function to create flash messages
+        function createFlashMessage(message, type) {
+            const flashContainer = document.querySelector('.flash-messages');
+            const flashMessage = document.createElement('div');
+            flashMessage.className = `flash-message flash-${type}`;
+            flashMessage.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                ${message}
+            `;
+            
+            flashContainer.appendChild(flashMessage);
+            
+            // Remove message after 5 seconds
+            setTimeout(() => {
+                flashMessage.style.animation = 'slideInRight 0.5s ease-out reverse';
+                setTimeout(() => {
+                    flashMessage.remove();
+                }, 500);
+            }, 5000);
+        }
+        
+        // Auto-hide flash messages after 5 seconds
+        document.querySelectorAll('.flash-message').forEach(message => {
+            setTimeout(() => {
+                message.style.animation = 'slideInRight 0.5s ease-out reverse';
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
