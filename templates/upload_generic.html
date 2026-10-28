@@ -506,7 +506,7 @@
                             <a href="{{ url_for('static', filename='uploads/' + ('attendance' if 'Attendance' in title else 'assignments') + '/year_' + year + '/' + file) }}" target="_blank" class="file-link">
                                 <i class="fas fa-file-pdf"></i> {{ file }}
                             </a>
-                            <form method="post" action="{{ url_for('delete_upload_unique', file_type=title.split()[1].lower(), year=year, filename=file) }}">
+                            <form method="post" action="{{ url_for('delete_upload_unique', file_type=title.split(" ")[1].toLowerCase(), year=year, filename=file) }}">
                                 <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this file?');">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>

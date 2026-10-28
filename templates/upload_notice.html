@@ -403,16 +403,15 @@
                 </button>
             </form>
 
-            {% with messages = get_flashed_messages() %}
+            {% set messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="flash-message {{ 'flash-success' if 'successfully' in message.lower() else 'flash-error' }}">
-                            <i class="fas {{ 'fa-check-circle' if 'successfully' in message.lower() else 'fa-exclamation-circle' }}"></i>
+                        <div class="flash-message {{ 'flash-success' if 'successfully' in message.toLowerCase() else 'flash-error' }}">
+                            <i class="fas {{ 'fa-check-circle' if 'successfully' in message.toLowerCase() else 'fa-exclamation-circle' }}"></i>
                             {{ message }}
                         </div>
                     {% endfor %}
                 {% endif %}
-            {% endwith %}
         </div>
 
         {% if pdf_files %}

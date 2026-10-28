@@ -450,7 +450,7 @@
             <div class="file-list year-content {% if (not year and year_num == '1') or year == year_num %}active{% else %}hidden{% endif %}" id="year-{{ year_num }}">
                 <h3><i class="fas fa-file-alt"></i> {{ title }} - Year {{ year_num }}</h3>
                 
-                {% set year_files = pdf_files.get(year_num, []) %}
+                {% set year_files = pdf_files[year_num] or [] %}
                 {% if year_files %}
                     {% for file in year_files %}
                         <div class="file-item">

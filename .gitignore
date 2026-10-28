@@ -7,4 +7,5 @@ venv/
 *.log
 uploads/
 config.json
-faculty_password*
+faculty_password*node_modules/
+.netlify/

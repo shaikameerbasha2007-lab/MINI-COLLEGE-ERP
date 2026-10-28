@@ -1,0 +1,19 @@
+{
+  "name": "mini-college-erp",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.7",
+    "@netlify/database": "^2.0.1",
+    "@netlify/functions": "^6.0.3",
+    "drizzle-orm": "^1.0.0-beta.22",
+    "nunjucks": "^3.2.4",
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/nunjucks": "^3.2.6",
+    "drizzle-kit": "^1.0.0-beta.22",
+    "typescript": "^7.0.2"
+  }
+}

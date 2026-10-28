@@ -220,11 +220,10 @@
         </a>
 
         <!-- Flash Messages -->
-        {% with messages = get_flashed_messages() %}
+        {% set messages = get_flashed_messages() %}
           {% if messages %}
             <p class="message">{{ messages[0] }}</p>
           {% endif %}
-        {% endwith %}
     </div>
 
     <script>
