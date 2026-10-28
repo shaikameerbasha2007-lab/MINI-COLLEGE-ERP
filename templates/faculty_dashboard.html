@@ -313,19 +313,28 @@
             });
     }
 
+    // The assignment, student records and attendance apps are separate
+    // deployments; their URLs come from site environment variables.
+    const externalApps = {{ external_apps | dump | safe }};
+
+    function openExternalApp(key, label) {
+        if (externalApps[key]) {
+            window.open(externalApps[key], "_blank");
+        } else {
+            alert(label + " app URL is not configured yet.");
+        }
+    }
+
     function openAssignment() {
-        const host = window.location.hostname;  
-        window.open("http://" + host + ":5001", "_blank");
+        openExternalApp("assignment", "Assignment");
     }
 
     function openStudentRecords() {
-        const host = window.location.hostname;  
-        window.open("http://" + host + ":5003", "_blank");
+        openExternalApp("studentRecords", "Student Records");
     }
     
     function openAttendance() {
-        const host = window.location.hostname;
-        window.open("http://" + host + ":5002", "_blank");
+        openExternalApp("attendance", "Attendance");
     }
 
     window.onload = fetchUnreadComplaintCount;

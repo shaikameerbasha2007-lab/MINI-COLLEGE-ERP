@@ -1,0 +1,6 @@
+[build]
+  publish = "public"
+
+[functions]
+  # The function renders the original Jinja templates and seeds the bundled notices.
+  included_files = ["templates/**", "seed/**"]

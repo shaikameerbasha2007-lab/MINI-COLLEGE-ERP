@@ -622,7 +622,7 @@
 <body>
     <!-- Flash Messages Container -->
     <div class="flash-messages">
-        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% set messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="flash-message flash-{{ category }}">
@@ -631,7 +631,6 @@
                     </div>
                 {% endfor %}
             {% endif %}
-        {% endwith %}
     </div>
 
     <div class="container">
